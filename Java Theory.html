@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Presentation Repository</title>
+
+```
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        min-height: 100vh;
+        color: #e2e8f0;
+        background:
+            radial-gradient(circle at 12% 10%, rgba(37,99,235,.18), transparent 28%),
+            radial-gradient(circle at 88% 18%, rgba(245,158,11,.12), transparent 26%),
+            linear-gradient(135deg, #07111f 0%, #0b1b31 48%, #102a43 100%);
+        background-attachment: fixed;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    body::before,
+    body::after {
+        content: "";
+        position: fixed;
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        pointer-events: none;
+        filter: blur(80px);
+        opacity: .28;
+        z-index: -1;
+        animation: ambientFloat 10s ease-in-out infinite alternate;
+    }
+
+    body::before {
+        top: 12%;
+        left: -120px;
+        background: #2563eb;
+    }
+
+    body::after {
+        right: -120px;
+        bottom: 8%;
+        background: #7c3aed;
+        animation-delay: -4s;
+    }
+
+    header {
+        width: 100%;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        padding: 28px 60px;
+        background: rgba(15,23,42,.58);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border-bottom: 1px solid rgba(148,163,184,.16);
+        box-shadow: 0 12px 35px rgba(0,0,0,.20);
+        animation: headerSlide .7s ease-out both;
+    }
+
+    header h1 {
+        font-size: 32px;
+        color: #f8fafc;
+        font-weight: 700;
+        letter-spacing: -.5px;
+        text-shadow: 0 0 22px rgba(96,165,250,.25);
+    }
+
+    header p {
+        margin-top: 6px;
+        color: #94a3b8;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1300px;
+        margin: 58px auto;
+        animation: pageFade .8s ease-out .1s both;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+        gap: 30px;
+    }
+
+    .file {
+        text-decoration: none;
+        color: inherit;
+        animation: cardReveal .65s ease-out both;
+    }
+
+    .file:nth-child(1) { animation-delay: .08s; }
+    .file:nth-child(2) { animation-delay: .14s; }
+    .file:nth-child(3) { animation-delay: .20s; }
+    .file:nth-child(4) { animation-delay: .26s; }
+    .file:nth-child(5) { animation-delay: .32s; }
+    .file:nth-child(6) { animation-delay: .38s; }
+    .file:nth-child(7) { animation-delay: .44s; }
+    .file:nth-child(8) { animation-delay: .50s; }
+
+    .card {
+        background: linear-gradient(
+            145deg,
+            rgba(30,41,59,.72),
+            rgba(15,23,42,.55)
+        );
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(148,163,184,.16);
+        border-radius: 22px;
+        padding: 35px;
+        text-align: center;
+        box-shadow:
+            0 12px 30px rgba(0,0,0,.20),
+            inset 0 1px 0 rgba(255,255,255,.05);
+        position: relative;
+        overflow: hidden;
+        transition: .35s ease;
+        will-change: transform, box-shadow;
+    }
+
+    .card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            120deg,
+            transparent 20%,
+            rgba(255,255,255,.06) 45%,
+            transparent 70%
+        );
+        transform: translateX(-120%);
+        transition: transform .7s ease;
+        pointer-events: none;
+    }
+
+    .file:hover .card::before {
+        transform: translateX(120%);
+    }
+
+    .file:hover .card {
+        transform: translateY(-10px) scale(1.015);
+        border-color: rgba(96,165,250,.40);
+        box-shadow:
+            0 22px 45px rgba(0,0,0,.35),
+            0 0 30px rgba(59,130,246,.10),
+            inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .icon {
+        font-size: 82px;
+        margin-bottom: 15px;
+        filter: drop-shadow(0 8px 14px rgba(0,0,0,.25));
+        transition: transform .35s ease;
+    }
+
+    .file:hover .icon {
+        transform: scale(1.08) rotate(-3deg);
+    }
+
+    .title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #f1f5f9;
+    }
+
+    .type {
+        margin-top: 8px;
+        color: #94a3b8;
+        font-size: 15px;
+    }
+
+    .open {
+        display: inline-block;
+        margin-top: 24px;
+        padding: 12px 28px;
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: #fff;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: transform .3s ease, box-shadow .3s ease, filter .3s ease;
+        box-shadow: 0 8px 20px rgba(37,99,235,.18);
+    }
+
+    .file:hover .open {
+        transform: scale(1.06);
+        box-shadow: 0 10px 26px rgba(79,70,229,.32);
+        filter: brightness(1.05);
+    }
+
+    footer {
+        margin: 60px 0 35px;
+        text-align: center;
+        color: #64748b;
+        font-size: 14px;
+        padding-bottom: 10px;
+    }
+
+    @keyframes pageFade {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes headerSlide {
+        from {
+            opacity: 0;
+            transform: translateY(-18px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes cardReveal {
+        from {
+            opacity: 0;
+            transform: translateY(18px) scale(.98);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    @keyframes ambientFloat {
+        from {
+            transform: translate3d(0,0,0) scale(1);
+        }
+        to {
+            transform: translate3d(35px,-25px,0) scale(1.12);
+        }
+    }
+
+    @media (max-width: 768px) {
+        header {
+            padding: 22px 18px;
+        }
+
+        header h1 {
+            font-size: 26px;
+        }
+
+        .container {
+            width: min(94%, 620px);
+            margin: 35px auto;
+        }
+
+        .grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            padding: 28px;
+        }
+
+        .icon {
+            font-size: 70px;
+        }
+
+        .title {
+            font-size: 20px;
+        }
+
+
+        .file {
+            width: 100%;
+        }
+
+        .card {
+            width: 100%;
+            padding: 26px 18px;
+        }
+
+        .open {
+            max-width: 100%;
+            padding: 11px 20px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: .01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: .01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<header>
+    <h1>📁 Java Theory</h1>
+    <p>Presentation Repository</p>
+</header>
+
+<div class="container">
+
+    <div class="grid">
+
+        <!-- COA 1 -->
+        <a href=""
+           class="file"
+           target="_blank"
+           rel="noopener noreferrer">
+            <div class="card">
+                <div class="icon">📄</div>
+                <div class="title">C9</div>
+                <div class="type">PowerPoint Presentation</div>
+                <div class="open">Open Presentation</div>
+            </div>
+        </a>
+
+        <!-- COA 2 -->
+        <a href=https://1drv.ms/p/c/333f29532904c2cf/IQDVbdmr1TJITZ6wzgls6g9yAYOgfZAfva_yJSirNtQB0zA?e=cEP6ev"
+           class="file"
+           target="_blank"
+           rel="noopener noreferrer">
+            <div class="card">
+                <div class="icon">📄</div>
+                <div class="title">D0</div>
+                <div class="type">PowerPoint Presentation</div>
+                <div class="open">Open Presentation</div>
+            </div>
+        </a>
+
+        <!-- COA 3 -->
+        <a href=""
+           class="file"
+           target="_blank"
+           rel="noopener noreferrer">
+            <div class="card">
+                <div class="icon">📄</div>
+                <div class="title">D1</div>
+                <div class="type">PowerPoint Presentation</div>
+                <div class="open">Open Presentation</div>
+            </div>
+        </a>
+
+        <!-- COA 4 -->
+        <a 
+           class="file"
+           target="_blank"
+           rel="noopener noreferrer">
+            <div class="card">
+                <div class="icon">📄</div>
+                <div class="title">D2</div>
+                <div class="type">PowerPoint Presentation</div>
+                <div class="open">Open Presentation</div>
+            </div>
+        </a>
+
+        <!-- COA 5 -->
+        <a 
+           class="file"
+           target="_blank"
+           rel="noopener noreferrer">
+            <div class="card">
+                <div class="icon">📄</div>
+                <div class="title">D3</div>
+                <div class="type">PowerPoint Presentation</div>
+                <div class="open">Open Presentation</div>
+            </div>
+        </a>
+
+        <!-- COA 6 -->
+        <a href="https://1drv.ms/p/c/333f29532904c2cf/IQBB64LfeAeOT7OThK5db6cJATUT0mXZA45Z4DNODn9SE0M?e=eagyXd"
+           class="file"
+           target="_blank"
+           rel="noopener noreferrer">
+            <div class="card">
+                <div class="icon">📄</div>
+                <div class="title">D4</div>
+                <div class="type">PowerPoint Presentation</div>
+                <div class="open">Open Presentation</div>
+            </div>
+        </a>
+        <a 
+           class="file"
+           target="_blank"
+           rel="noopener noreferrer">
+            <div class="card">
+                <div class="icon">📄</div>
+                <div class="title">D5</div>
+                <div class="type">PowerPoint Presentation</div>
+                <div class="open">Open Presentation</div>
+            </div>
+        </a>
+        <a 
+           class="file"
+           target="_blank"
+           rel="noopener noreferrer">
+            <div class="card">
+                <div class="icon">📄</div>
+                <div class="title">D6</div>
+                <div class="type">PowerPoint Presentation</div>
+                <div class="open">Open Presentation</div>
+            </div>
+        </a>
+        <a 
+           class="file"
+           target="_blank"
+           rel="noopener noreferrer">
+            <div class="card">
+                <div class="icon">📄</div>
+                <div class="title">D7</div>
+                <div class="type">PowerPoint Presentation</div>
+                <div class="open">Open Presentation</div>
+            </div>
+        </a>
+        <a href=""
+           class="file"
+           target="_blank"
+           rel="noopener noreferrer">
+            <div class="card">
+                <div class="icon">📄</div>
+                <div class="title">D8</div>
+                <div class="type">PowerPoint Presentation</div>
+                <div class="open">Open Presentation</div>
+            </div>
+        </a>
+        <a 
+           class="file"
+           target="_blank"
+           rel="noopener noreferrer">
+            <div class="card">
+                <div class="icon">📄</div>
+                <div class="title">D9</div>
+                <div class="type">PowerPoint Presentation</div>
+                <div class="open">Open Presentation</div>
+            </div>
+        </a>
+        <a 
+           class="file"
+           target="_blank"
+           rel="noopener noreferrer">
+            <div class="card">
+                <div class="icon">📄</div>
+                <div class="title">E0</div>
+                <div class="type">PowerPoint Presentation</div>
+                <div class="open">Open Presentation</div>
+            </div>
+        </a>
+
+    </div>
+
+</div>
+
+<footer>
+    Designed for Java Theory • by Chaitanya
+</footer>
+```
+
+</body>
+</html>
